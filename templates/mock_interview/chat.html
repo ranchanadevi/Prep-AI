@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block title %}Mock Interview Room — Prep AI{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4 animate-fade-in">
+    <!-- Progress Header -->
+    <div class="row mb-4 align-items-center">
+        <div class="col-12">
+            <h2 class="text-white display-font mb-1">Interview Room</h2>
+            <span class="badge bg-secondary py-2 px-3 border border-secondary">
+                Question {{ current_num }} of {{ total_num }}
+            </span>
+        </div>
+    </div>
+
+    <!-- Active Question Board -->
+    <div class="row">
+        <div class="col-lg-9 mx-auto">
+            <!-- Question Card -->
+            <div class="glass-card p-5 mb-4">
+                <div class="mb-4 text-center">
+                    <h3 class="text-white fw-semibold mb-2" id="questionText">
+                        "{{ question }}"
+                    </h3>
+                </div>
+
+                <form id="interviewForm">
+                    <div class="mb-4">
+                        <label for="answerInput" class="form-label">Your Response</label>
+                        <textarea id="answerInput" rows="6" class="form-control border-secondary text-white" placeholder="Type your answer here in detail... (minimum 2-3 sentences recommended)" required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100 py-3 font-outfit fs-5" id="submitBtn">
+                        Submit Answer <i class="fa-regular fa-paper-plane ms-1"></i>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Feedback Cards (Initially Hidden) -->
+            <div class="glass-card p-4 d-none mb-4 animate-fade-in" id="feedbackSection">
+                <h4 class="text-white mb-4"><i class="fa-solid fa-square-poll-horizontal text-primary me-2"></i> Answer Assessment</h4>
+                
+                <!-- Scores Row -->
+                <div class="row g-3 mb-4">
+                    <div class="col-md-4">
+                        <div class="p-3 rounded border border-secondary text-center" style="background: rgba(255,255,255,0.02);">
+                            <div class="text-muted small mb-1">Communication</div>
+                            <h4 class="text-success fw-bold display-font mb-0" id="commScoreVal">-/10</h4>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="p-3 rounded border border-secondary text-center" style="background: rgba(255,255,255,0.02);">
+                            <div class="text-muted small mb-1">Technical Depth</div>
+                            <h4 class="text-primary fw-bold display-font mb-0" id="techScoreVal">-/10</h4>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="p-3 rounded border border-secondary text-center" style="background: rgba(255,255,255,0.02);">
+                            <div class="text-muted small mb-1">Confidence / Tone</div>
+                            <h4 class="text-warning fw-bold display-font mb-0" id="confScoreVal">-/10</h4>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Suggestions Panel -->
+                <div class="p-3 rounded border border-secondary-subtle" style="background: rgba(255,255,255,0.02);">
+                    <h6 class="text-white mb-2"><i class="fa-solid fa-circle-info text-info me-1"></i> Evaluation Critique & Recommendations:</h6>
+                    <p class="text-muted mb-0 small" id="suggestionsText" style="line-height: 1.7; font-size: 14.5px;"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/mock_interview.js') }}"></script>
+{% endblock %}

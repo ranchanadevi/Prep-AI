@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Server Error (500) — Prep AI</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Custom Style -->
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+</head>
+<body class="d-flex align-items-center justify-content-center min-vh-100">
+
+    <div class="text-center p-5 glass-card animate-fade-in" style="max-width: 500px; margin: 20px;">
+        <div class="display-1 fw-bold text-danger mb-3"><i class="fa-solid fa-triangle-exclamation"></i> 500</div>
+        <h2 class="text-white mb-3 font-outfit">Internal Server Error</h2>
+        <p class="text-muted mb-4">Something went wrong on our end while processing this request. Our technical sensors have been notified.</p>
+        <a href="{{ url_for('dashboard.index') }}" class="btn btn-secondary px-4 py-2">
+            <i class="fa-solid fa-house me-2"></i> Return to Dashboard
+        </a>
+    </div>
+
+</body>
+</html>

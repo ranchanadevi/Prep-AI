@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Company Preparation — Prep AI{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4 animate-fade-in">
+    <!-- Page Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="text-white display-font mb-2">Company Preparation Sheets</h1>
+            <p class="text-muted">Target your preparation to specific hiring processes, exam syllabi, coding queries, and actual interview guides of top MNCs.</p>
+        </div>
+    </div>
+
+    <!-- Companies Grid -->
+    <div class="row g-4">
+        {% for comp in companies %}
+            <div class="col-md-6 col-lg-4 col-xl-3">
+                <div class="glass-card p-4 h-100 d-flex flex-column justify-content-between text-center">
+                    <div>
+                        <!-- Simulated Logo Badge -->
+                        <div class="d-inline-flex align-items-center justify-content-center rounded-circle mb-4 bg-primary bg-opacity-10 text-primary font-outfit fw-bold fs-3" style="width: 70px; height: 70px; border: 1px dashed var(--primary);">
+                            {{ comp.company_name[0:2] | upper }}
+                        </div>
+                        <h4 class="text-white mb-2">{{ comp.company_name }}</h4>
+                        <p class="text-muted small mb-0" style="height: 60px; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;">
+                            {{ comp.selection_process }}
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-top border-secondary">
+                        <a href="{{ url_for('companies.detail', company_id=comp.id) }}" class="btn btn-outline-primary w-100">
+                            View Prep Material
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block title %}Interview Performance Summary — Prep AI{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4 animate-fade-in">
+    <!-- Summary Header -->
+    <div class="row mb-5 text-center justify-content-center">
+        <div class="col-lg-8">
+            <div class="glass-card p-5">
+                <h4 class="text-muted text-uppercase small tracking-wider mb-2">Performance Summary</h4>
+                <h2 class="text-white display-font mb-4">Mock Interview Complete</h2>
+
+                <!-- Average Scores Grid -->
+                <div class="row g-3 mb-5">
+                    <div class="col-md-3">
+                        <div class="p-3 rounded border border-secondary text-center" style="background: rgba(99, 102, 241, 0.05); border-color: rgba(99, 102, 241, 0.3) !important;">
+                            <div class="text-white fw-semibold small mb-1">Overall Avg</div>
+                            <h3 class="text-white fw-bold display-font mb-0">{{ overall_avg }}/10</h3>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="p-3 rounded border border-secondary text-center" style="background: rgba(22, 163, 74, 0.05); border-color: rgba(22, 163, 74, 0.3) !important;">
+                            <div class="text-success fw-semibold small mb-1">Communication</div>
+                            <h3 class="text-success fw-bold display-font mb-0">{{ avg_comm }}/10</h3>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="p-3 rounded border border-secondary text-center" style="background: rgba(168, 85, 247, 0.05); border-color: rgba(168, 85, 247, 0.3) !important;">
+                            <div class="text-primary fw-semibold small mb-1">Technical Depth</div>
+                            <h3 class="text-primary fw-bold display-font mb-0">{{ avg_tech }}/10</h3>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="p-3 rounded border border-secondary text-center" style="background: rgba(245, 158, 11, 0.05); border-color: rgba(245, 158, 11, 0.3) !important;">
+                            <div class="text-warning fw-semibold small mb-1">Confidence / Tone</div>
+                            <h3 class="text-warning fw-bold display-font mb-0">{{ avg_conf }}/10</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-center gap-3">
+                    <a href="{{ url_for('mock_interview.start') }}" class="btn btn-primary px-4 py-2">Start New Session</a>
+                    <a href="{{ url_for('dashboard.index') }}" class="btn btn-secondary px-4 py-2">Back to Dashboard</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Question analysis list -->
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <h3 class="text-white mb-4 display-font"><i class="fa-solid fa-list-check text-primary me-2"></i> Question-by-Question Evaluation</h3>
+            
+            <div class="d-flex flex-column gap-4">
+                {% for item in evals %}
+                    <div class="glass-card p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-3 border-bottom border-secondary pb-2">
+                            <span class="badge bg-secondary font-outfit">Question {{ loop.index }}</span>
+                            <span class="text-muted small">Scores: Comm: <strong>{{ item.comm_score }}</strong> | Tech: <strong>{{ item.tech_score }}</strong> | Conf: <strong>{{ item.conf_score }}</strong></span>
+                        </div>
+
+                        <!-- Question & user response -->
+                        <h5 class="text-white mb-3 fw-semibold">Q: "{{ item.question }}"</h5>
+                        <div class="p-3 rounded border border-secondary mb-3 bg-dark bg-opacity-40">
+                            <h6 class="text-white mb-1 small text-uppercase text-opacity-50">Your Answer:</h6>
+                            <p class="text-white mb-0 small" style="line-height: 1.6;">{{ item.answer }}</p>
+                        </div>
+
+                        <!-- Critique suggestions -->
+                        <div class="p-3 rounded border border-secondary-subtle" style="background: rgba(255, 255, 255, 0.02);">
+                            <h6 class="text-white mb-2"><i class="fa-solid fa-circle-info text-info me-1"></i> AI Critique & Recommendations:</h6>
+                            <p class="text-muted mb-0 small" style="line-height: 1.6;">{{ item.suggestions }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+
+{% block title %}Practice Quiz — Prep AI{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4 animate-fade-in">
+    <!-- Header with progress & timer -->
+    <div class="row mb-4 align-items-center">
+        <div class="col-md-6 mb-3 mb-md-0">
+            <h2 class="text-white display-font mb-1">Aptitude Test</h2>
+            <span class="badge bg-secondary py-2 px-3 border border-secondary">
+                Question {{ current_idx + 1 }} of {{ total_questions }}
+            </span>
+        </div>
+        <div class="col-md-6 d-flex justify-content-md-end">
+            <div class="timer-badge" id="quizTimer">
+                <i class="fa-regular fa-clock"></i> <span id="timerVal">--:--</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quiz Question and Options form -->
+    <div class="row">
+        <div class="col-lg-9 mx-auto">
+            <div class="glass-card p-5">
+                <form id="quizForm" method="POST" action="{{ url_for('aptitude.quiz') }}">
+                    <!-- Hidden fields to maintain indexing context -->
+                    <input type="hidden" name="current_idx" value="{{ current_idx }}">
+                    <input type="hidden" name="action" id="formAction" value="next">
+
+                    <!-- Question Container -->
+                    <div class="mb-4">
+                        <h4 class="text-white mb-4 fs-5 fw-normal" style="line-height: 1.6;">
+                            {{ current_idx + 1 }}. {{ question.question }}
+                        </h4>
+                    </div>
+
+                    <!-- Options Grid -->
+                    <div class="d-flex flex-column gap-3 mb-5">
+                        <!-- Option A -->
+                        <label class="d-flex align-items-center gap-3 p-3 rounded-3 border border-secondary hover-glow cursor-pointer" style="background: rgba(255,255,255,0.03);">
+                            <input type="radio" name="option" value="A" {% if saved_answer == 'A' %}checked{% endif %} class="form-check-input flex-shrink-0" style="width: 20px; height: 20px; border-color: var(--primary);">
+                            <span class="text-white">A. {{ question.option_a }}</span>
+                        </label>
+                        <!-- Option B -->
+                        <label class="d-flex align-items-center gap-3 p-3 rounded-3 border border-secondary hover-glow cursor-pointer" style="background: rgba(255,255,255,0.03);">
+                            <input type="radio" name="option" value="B" {% if saved_answer == 'B' %}checked{% endif %} class="form-check-input flex-shrink-0" style="width: 20px; height: 20px; border-color: var(--primary);">
+                            <span class="text-white">B. {{ question.option_b }}</span>
+                        </label>
+                        <!-- Option C -->
+                        <label class="d-flex align-items-center gap-3 p-3 rounded-3 border border-secondary hover-glow cursor-pointer" style="background: rgba(255,255,255,0.03);">
+                            <input type="radio" name="option" value="C" {% if saved_answer == 'C' %}checked{% endif %} class="form-check-input flex-shrink-0" style="width: 20px; height: 20px; border-color: var(--primary);">
+                            <span class="text-white">C. {{ question.option_c }}</span>
+                        </label>
+                        <!-- Option D -->
+                        <label class="d-flex align-items-center gap-3 p-3 rounded-3 border border-secondary hover-glow cursor-pointer" style="background: rgba(255,255,255,0.03);">
+                            <input type="radio" name="option" value="D" {% if saved_answer == 'D' %}checked{% endif %} class="form-check-input flex-shrink-0" style="width: 20px; height: 20px; border-color: var(--primary);">
+                            <span class="text-white">D. {{ question.option_d }}</span>
+                        </label>
+                    </div>
+
+                    <!-- Navigation controls -->
+                    <div class="d-flex justify-content-between align-items-center border-top border-secondary pt-4">
+                        <button type="button" class="btn btn-secondary px-4 py-2" id="prevBtn" {% if current_idx == 0 %}disabled{% endif %}>
+                            <i class="fa-solid fa-arrow-left me-2"></i> Previous
+                        </button>
+                        
+                        {% if current_idx == total_questions - 1 %}
+                            <button type="button" class="btn btn-success px-4 py-2" id="submitBtn">
+                                Submit Quiz <i class="fa-solid fa-square-poll-horizontal ms-2"></i>
+                            </button>
+                        {% else %}
+                            <button type="button" class="btn btn-primary px-4 py-2" id="nextBtn">
+                                Next <i class="fa-solid fa-arrow-right ms-2"></i>
+                            </button>
+                        {% endif %}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const form = document.getElementById('quizForm');
+        const formAction = document.getElementById('formAction');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const submitBtn = document.getElementById('submitBtn');
+
+        // Navigation handlers
+        if (prevBtn) {
+            prevBtn.addEventListener('click', () => {
+                formAction.value = 'prev';
+                form.submit();
+            });
+        }
+        if (nextBtn) {
+            nextBtn.addEventListener('click', () => {
+                formAction.value = 'next';
+                form.submit();
+            });
+        }
+        if (submitBtn) {
+            submitBtn.addEventListener('click', () => {
+                if (confirm("Are you sure you want to submit your quiz?")) {
+                    formAction.value = 'submit';
+                    form.submit();
+                }
+            });
+        }
+
+        // Live Timer Countdown Clock
+        let remainingSeconds = parseInt("{{ remaining_time }}");
+        const timerVal = document.getElementById('timerVal');
+
+        const updateTimer = () => {
+            if (remainingSeconds <= 0) {
+                timerVal.textContent = "00:00";
+                alert("Time has expired! Submitting your responses.");
+                formAction.value = 'submit';
+                form.submit();
+                return;
+            }
+
+            const minutes = Math.floor(remainingSeconds / 60);
+            const seconds = remainingSeconds % 60;
+            
+            // Format string
+            const formattedMin = minutes < 10 ? '0' + minutes : minutes;
+            const formattedSec = seconds < 10 ? '0' + seconds : seconds;
+            
+            timerVal.textContent = `${formattedMin}:${formattedSec}`;
+            remainingSeconds--;
+            
+            setTimeout(updateTimer, 1000);
+        };
+
+        updateTimer();
+    });
+</script>
+{% endblock %}

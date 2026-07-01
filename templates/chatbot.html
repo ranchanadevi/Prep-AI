@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block title %}AI Chatbot — Prep AI{% endblock %}
+
+{% block extra_css %}
+<style>
+    .chat-card {
+        height: calc(100vh - 120px);
+        display: flex;
+        flex-direction: column;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-3">
+    <div class="row">
+        <div class="col-12">
+            <div class="glass-card chat-card animate-fade-in">
+                <!-- Chat Header -->
+                <div class="p-3 border-bottom border-secondary d-flex justify-content-between align-items-center bg-dark bg-opacity-20 rounded-top-4">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 45px; height: 45px;">
+                            <i class="fa-solid fa-robot fs-4"></i>
+                        </div>
+                        <div>
+                            <h5 class="text-white mb-0">Placement Assistant</h5>
+                            <span class="text-success small d-flex align-items-center gap-1">
+                                <span class="rounded-circle bg-success" style="width: 8px; height: 8px; display: inline-block;"></span>
+                                Online &bull; Gemini 1.5
+                            </span>
+                        </div>
+                    </div>
+                    <button class="btn btn-outline-danger btn-sm" id="clearChatBtn">
+                        <i class="fa-solid fa-trash-can me-1"></i> Clear Chat
+                    </button>
+                </div>
+
+                <!-- Messages Window -->
+                <div class="chat-messages" id="chatMessages">
+                    <div class="chat-bubble bot">
+                        Hello! I am <strong>Prep AI</strong>, your placement preparation assistant. 
+                        I can help you study for DSA, OOP, OS, Networks, SQL, Java/Python/C/C++, and review resume and HR questions. 
+                        How can I help you today?
+                    </div>
+
+                    {% for chat in chats %}
+                        <div class="chat-bubble user">
+                            {{ chat.message }}
+                        </div>
+                        <div class="chat-bubble bot markdown-content">
+                            {{ chat.response }}
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Input form -->
+                <form id="chatForm" class="chat-input-area bg-dark bg-opacity-10 rounded-bottom-4">
+                    <input type="text" id="chatInput" class="form-control border-secondary" placeholder="Ask about DSA, OOP, resume formatting, or HR answers..." required autocomplete="off">
+                    <button type="submit" class="btn btn-primary px-4">
+                        <i class="fa-regular fa-paper-plane"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Marked library to render markdown on the fly -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script>
+    // Pre-parse existing history markdown if there is any
+    document.addEventListener('DOMContentLoaded', () => {
+        const mdBubbles = document.querySelectorAll('.markdown-content');
+        mdBubbles.forEach(b => {
+            if (window.marked) {
+                b.innerHTML = marked.parse(b.textContent.trim());
+            }
+        });
+    });
+</script>
+<script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+{% endblock %}

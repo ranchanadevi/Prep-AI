@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prep AI — AI-Powered Placement Preparation Assistant</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Custom Style -->
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+    <style>
+        .landing-nav {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .hero-glow {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, var(--primary-glow) 0%, transparent 70%);
+            top: 20%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+            filter: blur(40px);
+        }
+        .step-num {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: #fff;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Header -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top landing-nav py-3">
+        <div class="container">
+            <a class="navbar-brand fw-bold display-font fs-3" href="#">
+                <i class="fa-solid fa-graduation-cap text-primary"></i> Prep AI
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-3">
+                    <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#about">How it Works</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#testimonials">Testimonials</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+                </ul>
+                <div class="d-flex gap-3">
+                    <a href="{{ url_for('auth.login') }}" class="btn btn-secondary py-2 px-4">Login</a>
+                    <a href="{{ url_for('auth.register') }}" class="btn btn-primary py-2 px-4">Get Started</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="landing-hero d-flex align-items-center min-vh-100 position-relative">
+        <div class="hero-glow"></div>
+        <div class="container">
+            <div class="row justify-content-center text-center">
+                <div class="col-lg-10 col-xl-8">
+                    <div class="badge bg-secondary text-white py-2 px-3 mb-4 border border-secondary animate-fade-in">
+                        🚀 Next-Gen Career Placement Accelerator
+                    </div>
+                    <h1 class="display-3 fw-bold text-white mb-4 animate-fade-in">
+                        Ace Your Campus Placements with <span class="gradient-text">Prep AI</span>
+                    </h1>
+                    <p class="lead text-muted mb-5 px-md-5 animate-fade-in" style="animation-delay: 0.1s;">
+                        An end-to-end, AI-powered simulator designed to help students master coding assessments, crack technical interviews, analyze resumes with ATS insights, and simulate live mock HR rounds.
+                    </p>
+                    <div class="d-flex justify-content-center gap-4 animate-fade-in" style="animation-delay: 0.2s;">
+                        <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-lg px-5 py-3 fs-5">
+                            Start Free Trial <i class="fa-solid fa-arrow-right ms-2"></i>
+                        </a>
+                        <a href="#features" class="btn btn-secondary btn-lg px-5 py-3 fs-5">Explore Tools</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-5" style="background: rgba(15, 23, 42, 0.3);">
+        <div class="container py-5">
+            <div class="row text-center mb-5">
+                <div class="col-12">
+                    <h2 class="display-5 text-white fw-bold mb-3">All Tools in One Premium Portal</h2>
+                    <p class="text-muted col-md-8 mx-auto">Prepare for placements systematically with our curated prep modules powered by advanced language models.</p>
+                </div>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="glass-card p-4 h-100">
+                        <div class="feature-icon"><i class="fa-solid fa-robot"></i></div>
+                        <h4 class="text-white mb-3">AI Chatbot</h4>
+                        <p class="text-muted">A dedicated assistant constrained to placement advice, engineering core topics, and code explanations. Integrated session context helps you ask follow-up questions.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="glass-card p-4 h-100">
+                        <div class="feature-icon"><i class="fa-solid fa-book"></i></div>
+                        <h4 class="text-white mb-3">Aptitude Practice</h4>
+                        <p class="text-muted">Timed practice tests containing real Quantitative, Logical, and Verbal questions with instant server-evaluated scoring and step-by-step explanations.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="glass-card p-4 h-100">
+                        <div class="feature-icon"><i class="fa-solid fa-code"></i></div>
+                        <h4 class="text-white mb-3">Technical Q&A</h4>
+                        <p class="text-muted">Explore frequently asked questions in subjects like OS, DBMS, Networks, OOP, and coding languages, complete with tag filters and search functionalities.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="glass-card p-4 h-100">
+                        <div class="feature-icon"><i class="fa-solid fa-microphone"></i></div>
+                        <h4 class="text-white mb-3">Mock Interviews</h4>
+                        <p class="text-muted">Simulate actual recruiter interviews question-by-question. Receive feedback metrics on communication, technical content, and suggestions for improvement.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="glass-card p-4 h-100">
+                        <div class="feature-icon"><i class="fa-solid fa-file-invoice"></i></div>
+                        <h4 class="text-white mb-3">Resume Analyzer</h4>
+                        <p class="text-muted">Upload your resume in PDF format. Extract content and receive dynamic ATS scores, grammar checks, missing skills lists, and optimization recommendations.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="glass-card p-4 h-100">
+                        <div class="feature-icon"><i class="fa-solid fa-chart-line"></i></div>
+                        <h4 class="text-white mb-3">Progress Tracking</h4>
+                        <p class="text-muted">Interactive dashboards charting your test performance over time. Pinpoints your strengths and weaknesses to recommend customized study modules.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Workflow Section -->
+    <section id="about" class="py-5">
+        <div class="container py-5">
+            <div class="row align-items-center">
+                <div class="col-lg-6 mb-4 mb-lg-0">
+                    <h2 class="display-5 text-white fw-bold mb-4">How Prep AI Prepares You for Success</h2>
+                    <p class="text-muted mb-4">Prep AI helps you move from basic engineering concepts to corporate readiness through structure and simulation.</p>
+                    
+                    <div class="row g-3">
+                        <div class="col-12 d-flex gap-3">
+                            <div class="step-num">1</div>
+                            <div>
+                                <h5 class="text-white">Learn Core Concepts</h5>
+                                <p class="text-muted">Go through subject-wise guides and chat with the AI bot to clear up questions about OS, DBMS, DSA, or system designs.</p>
+                            </div>
+                        </div>
+                        <div class="col-12 d-flex gap-3">
+                            <div class="step-num">2</div>
+                            <div>
+                                <h5 class="text-white">Attempt Structured Quizzes</h5>
+                                <p class="text-muted">Solve quantitative aptitude, logical reasoning, and English tests under actual timer-controlled quiz conditions.</p>
+                            </div>
+                        </div>
+                        <div class="col-12 d-flex gap-3">
+                            <div class="step-num">3</div>
+                            <div>
+                                <h5 class="text-white">Simulate Actual Drives</h5>
+                                <p class="text-muted">Review hiring processes of MNCs like TCS and Wipro, solve their past coding questions, and practice realistic mock interviews.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 text-center">
+                    <div class="glass-card p-5 inline-block text-start position-relative overflow-hidden" style="max-width: 500px; margin: 0 auto;">
+                        <h4 class="text-white mb-3"><i class="fa-solid fa-circle-check text-success me-2"></i> Placement Ready</h4>
+                        <p class="text-muted mb-4">A complete ecosystem that bridges classroom teaching and corporate assessments.</p>
+                        <div class="border-top pt-3 border-secondary mb-3 d-flex justify-content-between">
+                            <span class="text-muted">Aptitude Quizzes Completed</span>
+                            <span class="text-white fw-bold">12</span>
+                        </div>
+                        <div class="mb-3 d-flex justify-content-between">
+                            <span class="text-muted">Mock Interview Rating</span>
+                            <span class="text-success fw-bold">8.5 / 10</span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span class="text-muted">ATS Resume Score</span>
+                            <span class="text-primary fw-bold">85%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="py-5" style="background: rgba(15, 23, 42, 0.35);">
+        <div class="container py-5">
+            <div class="row text-center mb-5">
+                <div class="col-12">
+                    <h2 class="display-5 text-white fw-bold mb-3">Cracked by Successful Students</h2>
+                    <p class="text-muted">Read feedback from engineering students who cleared coding rounds and landed roles in top IT firms.</p>
+                </div>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="glass-card p-4">
+                        <div class="text-warning mb-3">
+                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                        </div>
+                        <p class="text-muted mb-4">"The Resume Analyzer was key for me. It pointed out that I was missing key cloud terminology and didn't list quantifiable project achievements. I edited it, got an 88% ATS score, and cleared the screening round at Accenture!"</p>
+                        <h5 class="text-white mb-1">Rohan Sharma</h5>
+                        <small class="text-primary">Software Engineer @ Accenture</small>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="glass-card p-4">
+                        <div class="text-warning mb-3">
+                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                        </div>
+                        <p class="text-muted mb-4">"The Mock Interview simulator evaluated my answers on communication and technical grounds. It gave me detailed critiques, which helped me structure my responses. I successfully cleared Wipro NLTH!"</p>
+                        <h5 class="text-white mb-1">Priya Patel</h5>
+                        <small class="text-primary">GenC Associate @ Wipro</small>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="glass-card p-4">
+                        <div class="text-warning mb-3">
+                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                        </div>
+                        <p class="text-muted mb-4">"Prep AI's aptitude tests let me practice logic and quantitative questions under a timer. It also has guides for TCS, Infosys, and Cognizant rounds. Truly a complete dashboard for students."</p>
+                        <h5 class="text-white mb-1">Amit Sen</h5>
+                        <small class="text-primary">System Engineer @ TCS</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer / Contact Section -->
+    <footer id="contact" class="py-5 text-center text-muted" style="border-top: 1px solid rgba(255, 255, 255, 0.05);">
+        <div class="container">
+            <h3 class="text-white mb-4"><i class="fa-solid fa-graduation-cap text-primary"></i> Prep AI</h3>
+            <p class="mb-4">Master assessments, build professional resumes, simulate mock interviews, and land your dream job.</p>
+            <div class="d-flex justify-content-center gap-4 mb-4">
+                <a href="#" class="text-muted"><i class="fa-brands fa-github fs-4"></i></a>
+                <a href="#" class="text-muted"><i class="fa-brands fa-linkedin fs-4"></i></a>
+                <a href="#" class="text-muted"><i class="fa-brands fa-twitter fs-4"></i></a>
+            </div>
+            <p class="small mb-0">&copy; 2026 Prep AI. All rights reserved. Designed for professional campus recruitment preparation.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

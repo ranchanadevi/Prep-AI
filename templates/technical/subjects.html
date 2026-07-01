@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %}Technical Subjects — Prep AI{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4 animate-fade-in">
+    <!-- Page Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="text-white display-font mb-2">Technical Interview Prep</h1>
+            <p class="text-muted">Study frequently asked computer science theory questions and language basics for placements.</p>
+        </div>
+    </div>
+
+    <!-- Subjects Grid -->
+    <div class="row g-4">
+        {% for code, name in subjects.items() %}
+            <div class="col-md-6 col-lg-4">
+                <div class="glass-card p-4 h-100 d-flex flex-column justify-content-between">
+                    <div>
+                        <div class="feature-icon mb-4">
+                            {% if code == 'C' %}
+                                <i class="fa-solid fa-copyright"></i>
+                            {% elif code == 'C++' %}
+                                <i class="fa-solid fa-plus-minus"></i>
+                            {% elif code == 'Java' %}
+                                <i class="fa-brands fa-java"></i>
+                            {% elif code == 'Python' %}
+                                <i class="fa-brands fa-python"></i>
+                            {% elif code == 'SQL' %}
+                                <i class="fa-solid fa-database"></i>
+                            {% elif code == 'DBMS' %}
+                                <i class="fa-solid fa-table"></i>
+                            {% elif code == 'OS' %}
+                                <i class="fa-solid fa-desktop"></i>
+                            {% elif code == 'CN' %}
+                                <i class="fa-solid fa-network-wired"></i>
+                            {% elif code == 'DSA' %}
+                                <i class="fa-solid fa-diagram-project"></i>
+                            {% else %}
+                                <i class="fa-solid fa-cubes"></i>
+                            {% endif %}
+                        </div>
+                        <h4 class="text-white mb-2">{{ name }}</h4>
+                        <p class="text-muted small">Explore core concepts, frequently asked interview questions, definition guides, and syntax structures.</p>
+                    </div>
+                    <div class="mt-4 pt-3 border-top border-secondary">
+                        <a href="{{ url_for('technical.subject_detail', subject_name=code) }}" class="btn btn-primary w-100">
+                            Explore Q&A
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

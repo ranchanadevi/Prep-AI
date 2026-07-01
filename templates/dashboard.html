@@ -1,0 +1,177 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard — Prep AI{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4 animate-fade-in">
+    <!-- Welcome Header -->
+    <div class="row mb-4">
+        <div class="col-12 d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <div>
+                <h1 class="text-white display-font mb-1">Welcome back, {{ user.full_name }}!</h1>
+                <p class="text-muted mb-0">Here is your placement readiness report for {{ user.college_name }} ({{ user.department }}, Year {{ user.year_of_study }}).</p>
+            </div>
+            <div>
+                <a href="{{ url_for('mock_interview.index') }}" class="btn btn-primary">
+                    <i class="fa-solid fa-microphone me-2"></i> Start Mock Interview
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-3">
+            <div class="glass-card p-4 h-100 d-flex align-items-center gap-3">
+                <div class="stat-icon-wrapper rounded-3 p-3 bg-opacity-10 bg-primary d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                    <i class="fa-solid fa-circle-check fs-2 text-primary"></i>
+                </div>
+                <div>
+                    <div class="text-muted small">Total Quizzes</div>
+                    <div class="stat-val text-white">{{ total_quizzes }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="glass-card p-4 h-100 d-flex align-items-center gap-3">
+                <div class="stat-icon-wrapper rounded-3 p-3 bg-opacity-10 bg-success d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                    <i class="fa-solid fa-bullseye fs-2 text-success"></i>
+                </div>
+                <div>
+                    <div class="text-muted small">Average Score</div>
+                    <div class="stat-val text-white">{{ avg_score }}%</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="glass-card p-4 h-100 d-flex align-items-center gap-3">
+                <div class="stat-icon-wrapper rounded-3 p-3 bg-opacity-10 bg-info d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                    <i class="fa-solid fa-bolt fs-2 text-info"></i>
+                </div>
+                <div>
+                    <div class="text-muted small">Strong Topics</div>
+                    <div class="stat-val text-white">
+                        {% if strong_topics %}
+                            <span class="fs-6 badge bg-success-subtle text-success border border-success">{{ strong_topics|length }} Active</span>
+                        {% else %}
+                            <span class="text-muted fs-6">None Yet</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="glass-card p-4 h-100 d-flex align-items-center gap-3">
+                <div class="stat-icon-wrapper rounded-3 p-3 bg-opacity-10 bg-danger d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                    <i class="fa-solid fa-circle-exclamation fs-2 text-danger"></i>
+                </div>
+                <div>
+                    <div class="text-muted small">Weak Topics</div>
+                    <div class="stat-val text-white">
+                        {% if weak_topics %}
+                            <span class="fs-6 badge bg-danger-subtle text-danger border border-danger">{{ weak_topics|length }} Critical</span>
+                        {% else %}
+                            <span class="text-muted fs-6">None Found</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Strengths, Weaknesses and Activity Panels -->
+    <div class="row g-4 mb-4">
+        <!-- left Panel: recommendations & lists -->
+        <div class="col-lg-7">
+            <!-- Strengths / Weaknesses Breakdown -->
+            <div class="glass-card p-4 mb-4">
+                <h4 class="text-white mb-3"><i class="fa-solid fa-shapes text-primary me-2"></i> Topics Breakdown</h4>
+                
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="p-3 rounded-3" style="background: rgba(22, 163, 74, 0.08); border: 1px solid rgba(22, 163, 74, 0.2);">
+                            <h6 class="text-success mb-2"><i class="fa-solid fa-arrow-trend-up me-1"></i> Strong Topics (&ge; 70%)</h6>
+                            {% if strong_topics %}
+                                <ul class="list-unstyled mb-0 d-flex flex-wrap gap-2 mt-2">
+                                    {% for t in strong_topics %}
+                                        <li><span class="badge bg-success text-white">{{ t }}</span></li>
+                                    {% endfor %}
+                                </ul>
+                            {% else %}
+                                <p class="text-muted mb-0 small">Keep scoring above 70% in assessments to register strong subjects.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="p-3 rounded-3" style="background: rgba(220, 38, 38, 0.08); border: 1px solid rgba(220, 38, 38, 0.2);">
+                            <h6 class="text-danger mb-2"><i class="fa-solid fa-arrow-trend-down me-1"></i> Weak Topics (&lt; 50%)</h6>
+                            {% if weak_topics %}
+                                <ul class="list-unstyled mb-0 d-flex flex-wrap gap-2 mt-2">
+                                    {% for t in weak_topics %}
+                                        <li><span class="badge bg-danger text-white">{{ t }}</span></li>
+                                    {% endfor %}
+                                </ul>
+                            {% else %}
+                                <p class="text-muted mb-0 small">Excellent! No weak topics registered under 50% average score.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recommended Practice Modules -->
+            <div class="glass-card p-4">
+                <h4 class="text-white mb-3"><i class="fa-solid fa-graduation-cap text-primary me-2"></i> Recommended for You</h4>
+                
+                <div class="d-flex flex-column gap-3">
+                    {% for rec in recommendations %}
+                        <div class="d-flex align-items-center justify-content-between p-3 rounded-3 glass-card hover-glow border-secondary-subtle">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="p-2 rounded bg-secondary bg-opacity-25 d-flex align-items-center justify-content-center text-white" style="width: 45px; height: 45px;">
+                                    <i class="fa-solid {{ rec.icon }} fs-5"></i>
+                                </div>
+                                <div>
+                                    <h6 class="text-white mb-1">{{ rec.title }}</h6>
+                                    <p class="text-muted mb-0 small">{{ rec.description }}</p>
+                                </div>
+                            </div>
+                            <a href="{{ rec.link }}" class="btn btn-outline-primary btn-sm px-3">Start</a>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Panel: Activity Feed -->
+        <div class="col-lg-5">
+            <div class="glass-card p-4 h-100">
+                <h4 class="text-white mb-4"><i class="fa-solid fa-clock-rotate-left text-primary me-2"></i> Recent Activity Feed</h4>
+                
+                {% if recent_activities %}
+                    <div class="timeline-wrapper ps-2">
+                        <ul class="list-unstyled position-relative border-start border-secondary ps-4">
+                            {% for act in recent_activities %}
+                                <li class="position-relative mb-4">
+                                    <div class="position-absolute rounded-circle bg-dark border border-secondary d-flex align-items-center justify-content-center text-center" style="width: 28px; height: 28px; left: -39px; top: 0;">
+                                        <i class="fa-solid {{ act.icon.split(' ')[0] }} {{ act.icon.split(' ')[1] }} small"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="text-white mb-1">{{ act.title }}</h6>
+                                        <p class="text-muted mb-0 small">{{ act.desc }}</p>
+                                        <span class="text-muted text-opacity-75 small" style="font-size: 11px;">{{ act.date.strftime('%d %b %Y, %I:%M %p') }}</span>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% else %}
+                    <div class="d-flex flex-column align-items-center justify-content-center text-center h-75 py-5 text-muted">
+                        <i class="fa-solid fa-list-check fs-1 mb-3 text-secondary"></i>
+                        <p>No recent activity. Begin by trying out an aptitude quiz or talking to the chatbot!</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

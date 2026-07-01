@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+
+{% block title %}HR Interview Questions — Prep AI{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4 animate-fade-in">
+    <!-- Page Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="text-white display-font mb-2">HR Interview Preparation</h1>
+            <p class="text-muted">Review common HR questions asked during placement interviews. Generate sample answers tailored by AI and cached for offline use.</p>
+        </div>
+    </div>
+
+    <!-- Questions Grid -->
+    <div class="row g-4">
+        <div class="col-lg-10 mx-auto">
+            <div class="d-flex flex-column gap-4">
+                {% for q in questions %}
+                    <div class="glass-card p-4 position-relative overflow-hidden" id="card-{{ q.id }}">
+                        <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-3">
+                            <span class="badge bg-secondary font-outfit">Question {{ loop.index }}</span>
+                        </div>
+                        <h4 class="text-white mb-3 fs-5" style="line-height: 1.5;">{{ q.question }}</h4>
+                        
+                        <!-- Toggle answer container -->
+                        <div class="answer-container mt-3 d-none" id="answer-{{ q.id }}">
+                            <div class="p-3 rounded-3 border border-secondary-subtle" style="background: rgba(255, 255, 255, 0.02);">
+                                <h6 class="text-white mb-2"><i class="fa-solid fa-lightbulb text-warning me-1"></i> Recommended Sample Answer:</h6>
+                                <p class="text-muted mb-0 small answer-text" style="line-height: 1.7; font-size: 14.5px;">
+                                    {% if q.cached_sample_answer %}
+                                        {{ q.cached_sample_answer | replace('\n', '<br>') | safe }}
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Action controls -->
+                        <div class="d-flex justify-content-end mt-3 border-top border-secondary pt-3">
+                            {% if q.cached_sample_answer %}
+                                <button class="btn btn-outline-primary btn-sm toggle-btn" data-id="{{ q.id }}">
+                                    <i class="fa-solid fa-eye me-1"></i> Show Sample Answer
+                                </button>
+                            {% else %}
+                                <button class="btn btn-primary btn-sm generate-btn" data-id="{{ q.id }}">
+                                    <i class="fa-solid fa-wand-magic-sparkles me-1"></i> Generate Sample Answer
+                                </button>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Toggle cached answers
+        document.querySelectorAll('.toggle-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const qId = btn.getAttribute('data-id');
+                const container = document.getElementById(`answer-${qId}`);
+                
+                if (container.classList.contains('d-none')) {
+                    container.classList.remove('d-none');
+                    btn.innerHTML = '<i class="fa-solid fa-eye-slash me-1"></i> Hide Sample Answer';
+                } else {
+                    container.classList.add('d-none');
+                    btn.innerHTML = '<i class="fa-solid fa-eye me-1"></i> Show Sample Answer';
+                }
+            });
+        });
+
+        // AJAX generation
+        document.querySelectorAll('.generate-btn').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                const qId = btn.getAttribute('data-id');
+                const container = document.getElementById(`answer-${qId}`);
+                const textElem = container.querySelector('.answer-text');
+                
+                // Show loading spinner
+                btn.disabled = true;
+                btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1" role="status"></span> Generating...';
+
+                try {
+                    const response = await fetch(`/hr/generate/${qId}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
+
+                    const data = await response.json();
+                    
+                    if (data.status === 'success') {
+                        // Render text
+                        textElem.innerHTML = data.answer.replace(/\n/g, '<br>');
+                        
+                        // Show container
+                        container.classList.remove('d-none');
+                        
+                        // Change button to toggle button
+                        btn.outerHTML = `
+                            <button class="btn btn-outline-primary btn-sm toggle-btn" data-id="${qId}">
+                                <i class="fa-solid fa-eye-slash me-1"></i> Hide Sample Answer
+                            </button>
+                        `;
+                        
+                        // Re-bind click event to new button
+                        const newBtn = document.querySelector(`.toggle-btn[data-id="${qId}"]`);
+                        newBtn.addEventListener('click', () => {
+                            if (container.classList.contains('d-none')) {
+                                container.classList.remove('d-none');
+                                newBtn.innerHTML = '<i class="fa-solid fa-eye-slash me-1"></i> Hide Sample Answer';
+                            } else {
+                                container.classList.add('d-none');
+                                newBtn.innerHTML = '<i class="fa-solid fa-eye me-1"></i> Show Sample Answer';
+                            }
+                        });
+                        
+                    } else {
+                        alert(data.message || "Failed to generate answer. Please try again.");
+                        btn.disabled = false;
+                        btn.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles me-1"></i> Generate Sample Answer';
+                    }
+                } catch (err) {
+                    console.error(err);
+                    alert("Error communicating with server.");
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles me-1"></i> Generate Sample Answer';
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ company.company_name }} Prep Guide — Prep AI{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4 animate-fade-in">
+    <!-- Back button & Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <a href="{{ url_for('companies.index') }}" class="btn btn-secondary btn-sm mb-3">
+                <i class="fa-solid fa-arrow-left me-1"></i> Back to Companies
+            </a>
+            <div class="d-flex align-items-center gap-3">
+                <div class="d-inline-flex align-items-center justify-content-center rounded-circle bg-primary bg-opacity-10 text-primary font-outfit fw-bold fs-3" style="width: 60px; height: 60px; border: 1px dashed var(--primary);">
+                    {{ company.company_name[0:2] | upper }}
+                </div>
+                <div>
+                    <h1 class="text-white display-font mb-0">{{ company.company_name }} Recruitment Guide</h1>
+                    <p class="text-muted mb-0">Specialized study roadmap and previously asked questions for {{ company.company_name }}.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabbed Panel -->
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <div class="glass-card overflow-hidden">
+                <!-- Tabs navigation -->
+                <ul class="nav nav-tabs border-secondary bg-dark bg-opacity-25" id="companyTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active text-white border-0 py-3 px-4" id="process-tab" data-bs-toggle="tab" data-bs-target="#process-content" type="button" role="tab" aria-controls="process-content" aria-selected="true">
+                            <i class="fa-solid fa-circle-info me-2 text-primary"></i> Selection Process
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link text-white border-0 py-3 px-4" id="rounds-tab" data-bs-toggle="tab" data-bs-target="#rounds-content" type="button" role="tab" aria-controls="rounds-content" aria-selected="false">
+                            <i class="fa-solid fa-sitemap me-2 text-info"></i> Interview Rounds
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link text-white border-0 py-3 px-4" id="coding-tab" data-bs-toggle="tab" data-bs-target="#coding-content" type="button" role="tab" aria-controls="coding-content" aria-selected="false">
+                            <i class="fa-solid fa-keyboard me-2 text-warning"></i> Coding Problems
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link text-white border-0 py-3 px-4" id="hr-tab" data-bs-toggle="tab" data-bs-target="#hr-content" type="button" role="tab" aria-controls="hr-content" aria-selected="false">
+                            <i class="fa-solid fa-user-tie me-2 text-danger"></i> Sample HR Qs
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link text-white border-0 py-3 px-4" id="history-tab" data-bs-toggle="tab" data-bs-target="#history-content" type="button" role="tab" aria-controls="history-content" aria-selected="false">
+                            <i class="fa-solid fa-history me-2 text-success"></i> Previous Qs
+                        </button>
+                    </li>
+                </ul>
+
+                <!-- Tabs Content -->
+                <div class="tab-content p-4" id="companyTabsContent">
+                    <!-- Selection Process Tab -->
+                    <div class="tab-pane fade show active text-muted" id="process-content" role="tabpanel" aria-labelledby="process-tab" style="line-height: 1.8;">
+                        <h5 class="text-white mb-3">Overview of Selection Process</h5>
+                        <p>{{ company.selection_process | replace('\n', '<br>') | safe }}</p>
+                    </div>
+
+                    <!-- Interview Rounds Tab -->
+                    <div class="tab-pane fade text-muted" id="rounds-content" role="tabpanel" aria-labelledby="rounds-tab" style="line-height: 1.8;">
+                        <h5 class="text-white mb-3">Structure of Placement Rounds</h5>
+                        <p>{{ company.interview_rounds | replace('\n', '<br>') | safe }}</p>
+                    </div>
+
+                    <!-- Coding Questions Tab -->
+                    <div class="tab-pane fade text-muted" id="coding-content" role="tabpanel" aria-labelledby="coding-tab" style="line-height: 1.8;">
+                        <h5 class="text-white mb-3">Frequently Asked Coding Question</h5>
+                        <div class="p-3 rounded bg-dark bg-opacity-40 border border-secondary mb-3">
+                            <p class="mb-0">{{ company.coding_question | replace('\n', '<br>') | safe }}</p>
+                        </div>
+                        <a href="{{ url_for('coding.index') }}" class="btn btn-outline-primary btn-sm">
+                            <i class="fa-solid fa-terminal me-1"></i> Go to Coding Board
+                        </a>
+                    </div>
+
+                    <!-- HR Questions Tab -->
+                    <div class="tab-pane fade text-muted" id="hr-content" role="tabpanel" aria-labelledby="hr-tab" style="line-height: 1.8;">
+                        <h5 class="text-white mb-3">Targeted HR Interview Question</h5>
+                        <div class="p-3 rounded bg-dark bg-opacity-40 border border-secondary mb-3">
+                            <p class="mb-0 font-italic">"{{ company.hr_question | replace('\n', '<br>') | safe }}"</p>
+                        </div>
+                        <a href="{{ url_for('hr.index') }}" class="btn btn-outline-primary btn-sm">
+                            <i class="fa-solid fa-wand-magic-sparkles me-1"></i> Practice HR Q&As
+                        </a>
+                    </div>
+
+                    <!-- History Tab -->
+                    <div class="tab-pane fade text-muted" id="history-content" role="tabpanel" aria-labelledby="history-tab" style="line-height: 1.8;">
+                        <h5 class="text-white mb-3">Previously Asked Questions (Memory-Based)</h5>
+                        <p>{{ company.previous_interview_question | replace('\n', '<br>') | safe }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .nav-tabs .nav-link {
+        border-radius: 0;
+        opacity: 0.7;
+        transition: var(--transition-smooth);
+    }
+    .nav-tabs .nav-link:hover {
+        opacity: 1;
+        background: rgba(255, 255, 255, 0.03);
+    }
+    .nav-tabs .nav-link.active {
+        opacity: 1;
+        background: rgba(255, 255, 255, 0.08) !important;
+        border-bottom: 2px solid var(--primary) !important;
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,176 @@
+{% extends 'base.html' %}
+
+{% block title %}User Profile — Prep AI{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4 animate-fade-in">
+    <!-- Page Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="text-white display-font mb-2">My Profile Workspace</h1>
+            <p class="text-muted">Manage your personal account settings, credentials, and review historical performance
+                scores.</p>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Left Column: Edit details & change password -->
+        <div class="col-lg-5">
+            <!-- Edit Profile Card -->
+            <div class="glass-card p-4 mb-4">
+                <h4 class="text-white mb-3"><i class="fa-regular fa-id-card text-primary me-2"></i> Account Details</h4>
+
+                <form action="{{ url_for('profile.update') }}" method="POST">
+                    <div class="mb-3">
+                        <label for="full_name" class="form-label">Full Name</label>
+                        <input type="text" class="form-control text-white" id="full_name" name="full_name"
+                            value="{{ user.full_name }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email Address (Read-Only)</label>
+                        <input type="email" class="form-control text-muted bg-dark bg-opacity-50" id="email"
+                            value="{{ user.email }}" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="college_name" class="form-label">College / University</label>
+                        <input type="text" class="form-control text-white" id="college_name" name="college_name"
+                            value="{{ user.college_name }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="department" class="form-label">Department / Branch</label>
+                        <select class="form-select text-white border-secondary" id="department" name="department"
+                            required style="background-color: #0f172a;">
+                            <option value="Computer Science & Engineering" {% if
+                                user.department=='Computer Science & Engineering' %}selected{% endif %}>Computer Science
+                                & Engineering</option>
+                            <option value="Information Technology" {% if user.department=='Information Technology'
+                                %}selected{% endif %}>Information Technology</option>
+                            <option value="Electronics & Communication" {% if
+                                user.department=='Electronics & Communication' %}selected{% endif %}>Electronics &
+                                Communication</option>
+                            <option value="Electrical Engineering" {% if user.department=='Electrical Engineering'
+                                %}selected{% endif %}>Electrical Engineering</option>
+                            <option value="Mechanical Engineering" {% if user.department=='Mechanical Engineering'
+                                %}selected{% endif %}>Mechanical Engineering</option>
+                            <option value="Civil Engineering" {% if user.department=='Civil Engineering' %}selected{%
+                                endif %}>Civil Engineering</option>
+                            <option value="Artifical Intelligence & Data Science" {% if
+                                user.department=='Artifical Intelligence & Data Science' %}selected{% endif %}>Artifical
+                                Intelligence & Data Science</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label for="year_of_study" class="form-label">Year of Study</label>
+                        <select class="form-select text-white border-secondary" id="year_of_study" name="year_of_study"
+                            required style="background-color: #0f172a;">
+                            <option value="1" {% if user.year_of_study==1 %}selected{% endif %}>1st Year (Freshman)
+                            </option>
+                            <option value="2" {% if user.year_of_study==2 %}selected{% endif %}>2nd Year (Sophomore)
+                            </option>
+                            <option value="3" {% if user.year_of_study==3 %}selected{% endif %}>3rd Year (Junior)
+                            </option>
+                            <option value="4" {% if user.year_of_study==4 %}selected{% endif %}>4th Year (Senior)
+                            </option>
+                            <option value="5" {% if user.year_of_study==5 %}selected{% endif %}>5th Year</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">Update Profile</button>
+                </form>
+            </div>
+
+            <!-- Password Card -->
+            <div class="glass-card p-4">
+                <h4 class="text-white mb-3"><i class="fa-solid fa-key text-primary me-2"></i> Update Security
+                    Credentials</h4>
+
+                <form action="{{ url_for('profile.change_password') }}" method="POST">
+                    <div class="mb-3">
+                        <label for="current_password" class="form-label">Current Password</label>
+                        <input type="password" class="form-control text-white" id="current_password"
+                            name="current_password" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="new_password" class="form-label">New Password</label>
+                        <input type="password" class="form-control text-white" id="new_password" name="new_password"
+                            required placeholder="Min 8 characters, numbers+letters">
+                    </div>
+                    <div class="mb-4">
+                        <label for="confirm_new_password" class="form-label">Confirm New Password</label>
+                        <input type="password" class="form-control text-white" id="confirm_new_password"
+                            name="confirm_new_password" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-outline-primary w-100">Change Password</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Right Column: Histories -->
+        <div class="col-lg-7">
+            <!-- Quiz History Card -->
+            <div class="glass-card p-4 mb-4">
+                <h4 class="text-white mb-4"><i class="fa-solid fa-award text-primary me-2"></i> Quiz Attempts History
+                </h4>
+
+                {% if quizzes %}
+                <div class="table-responsive" style="max-height: 250px; overflow-y: auto;">
+                    <table class="table table-dark table-hover mb-0 align-middle small">
+                        <thead>
+                            <tr style="border-bottom: 1px solid var(--card-border);">
+                                <th>Date</th>
+                                <th>Category</th>
+                                <th>Score</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for q in quizzes %}
+                            <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                                <td>{{ q.created_at.strftime('%d %b %Y') }}</td>
+                                <td class="text-white fw-semibold">{{ q.category }}</td>
+                                <td>{{ q.score }} / {{ q.total_questions }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p class="text-muted mb-0 small py-3">No historical quiz entries found.</p>
+                {% endif %}
+            </div>
+
+            <!-- Mock Interviews Card -->
+            <div class="glass-card p-4">
+                <h4 class="text-white mb-4"><i class="fa-solid fa-microphone text-primary me-2"></i> Mock Interviews
+                    History</h4>
+
+                {% if mocks %}
+                <div class="table-responsive" style="max-height: 300px; overflow-y: auto;">
+                    <table class="table table-dark table-hover mb-0 align-middle small">
+                        <thead>
+                            <tr style="border-bottom: 1px solid var(--card-border);">
+                                <th>Date</th>
+                                <th>Question Sample</th>
+                                <th>Scores (Comm/Tech/Conf)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for m in mocks %}
+                            <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                                <td>{{ m.created_at.strftime('%d %b %Y') }}</td>
+                                <td class="text-white text-truncate" style="max-width: 200px;" title="{{ m.question }}">
+                                    {{ m.question }}</td>
+                                <td>{{ m.communication_score }}/{{ m.technical_score }}/{{ m.confidence_score }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p class="text-muted mb-0 small py-3">No historical mock interview sessions found.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

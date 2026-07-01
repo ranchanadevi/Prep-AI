@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+
+{% block title %}Resume ATS Analyzer — Prep AI{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4 animate-fade-in">
+    <!-- Page Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="text-white display-font mb-2">Resume ATS Analyzer</h1>
+            <p class="text-muted">Evaluate your resume compatibility with applicant tracking systems (ATS). Upload a PDF to generate improvement tips.</p>
+        </div>
+    </div>
+
+    {% if active_report %}
+        <!-- Report details workspace -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <a href="{{ url_for('resume.index') }}" class="btn btn-secondary btn-sm mb-3">
+                    <i class="fa-solid fa-arrow-left me-1"></i> Upload Another Resume
+                </a>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <!-- Left panel: ATS score circle representation -->
+            <div class="col-md-4">
+                <div class="glass-card p-4 text-center h-100 d-flex flex-column justify-content-center align-items-center">
+                    <h5 class="text-muted text-uppercase small tracking-wider mb-3">ATS Score</h5>
+                    
+                    <div class="d-inline-flex align-items-center justify-content-center rounded-circle border border-secondary mb-4" style="width: 150px; height: 150px; background: rgba(255, 255, 255, 0.03); border-width: 5px !important; border-color: {% if analysis.ats_score >= 80 %}#10b981{% elif analysis.ats_score >= 60 %}#f59e0b{% else %}#ef4444{% endif %} !important;">
+                        <div class="text-center">
+                            <span class="display-3 fw-bold text-white">{{ analysis.ats_score }}</span>
+                            <span class="text-muted d-block" style="margin-top: -10px;">%</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-2">
+                        <span class="text-white fw-semibold">File:</span>
+                        <span class="text-muted small d-block text-truncate px-2" style="max-width: 220px;">{{ active_report.filename }}</span>
+                    </div>
+                    <span class="text-muted small">Generated on {{ active_report.created_at.strftime('%d %b %Y') }}</span>
+                </div>
+            </div>
+
+            <!-- Right panel: detailed breakdown -->
+            <div class="col-md-8">
+                <div class="glass-card p-4 h-100">
+                    <h4 class="text-white mb-4"><i class="fa-solid fa-clipboard-question text-primary me-2"></i> Analysis Report</h4>
+                    
+                    <div class="d-flex flex-column gap-4">
+                        <!-- Strengths -->
+                        <div>
+                            <h6 class="text-success mb-2"><i class="fa-solid fa-circle-check me-1"></i> Key Strengths</h6>
+                            <ul class="list-unstyled mb-0 ps-3">
+                                {% for s in analysis.strengths %}
+                                    <li class="text-muted small mb-2"><i class="fa-solid fa-check text-success me-2"></i> {{ s }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+
+                        <!-- Missing Skills -->
+                        <div>
+                            <h6 class="text-warning mb-2"><i class="fa-solid fa-triangle-exclamation me-1"></i> Missing / Unidentified Skills</h6>
+                            <ul class="list-unstyled mb-0 ps-3">
+                                {% for ms in analysis.missing_skills %}
+                                    <li class="text-muted small mb-2"><i class="fa-solid fa-minus text-warning me-2"></i> {{ ms }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+
+                        <!-- Grammar Suggestions -->
+                        <div>
+                            <h6 class="text-info mb-2"><i class="fa-solid fa-pen-nib me-1"></i> Grammar & Styling Fixes</h6>
+                            <ul class="list-unstyled mb-0 ps-3">
+                                {% for g in analysis.grammar_suggestions %}
+                                    <li class="text-muted small mb-2"><i class="fa-solid fa-circle-info text-info me-2"></i> {{ g }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+
+                        <!-- Improvement Tips -->
+                        <div>
+                            <h6 class="text-primary mb-2"><i class="fa-solid fa-circle-up me-1"></i> Recommended Optimization Tips</h6>
+                            <ul class="list-unstyled mb-0 ps-3">
+                                {% for tip in analysis.improvement_tips %}
+                                    <li class="text-muted small mb-2"><i class="fa-solid fa-arrow-right text-primary me-2"></i> {{ tip }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    {% else %}
+        <!-- Upload Form View -->
+        <div class="row g-4">
+            <div class="col-lg-8">
+                <div class="glass-card p-5">
+                    <form action="{{ url_for('resume.index') }}" method="POST" enctype="multipart/form-data">
+                        <div class="text-center mb-5 border border-secondary border-dashed p-5 rounded-4 bg-dark bg-opacity-25" style="border-style: dashed !important; border-width: 2px !important;">
+                            <div class="fs-1 text-primary mb-3"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+                            <h4 class="text-white mb-2">Upload your Resume</h4>
+                            <p class="text-muted small">Drag and drop your document here or search local storage</p>
+                            
+                            <div class="d-flex justify-content-center mt-4">
+                                <input type="file" name="resume" id="resume" class="form-control" style="max-width: 320px;" required accept=".pdf">
+                            </div>
+                            <div class="form-text text-muted small mt-2">Only PDF documents (.pdf) up to 10MB are accepted.</div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100 py-3">
+                            Analyze Document <i class="fa-solid fa-wand-magic-sparkles ms-2"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Side column: History -->
+            <div class="col-lg-4">
+                <div class="glass-card p-4 h-100">
+                    <h4 class="text-white mb-4"><i class="fa-solid fa-clock-rotate-left text-primary me-2"></i> Past Reports</h4>
+                    
+                    {% if reports %}
+                        <div class="d-flex flex-column gap-3">
+                            {% for rep in reports %}
+                                <div class="p-3 rounded bg-dark bg-opacity-40 border border-secondary d-flex align-items-center justify-content-between">
+                                    <div style="max-width: 60%;">
+                                        <h6 class="text-white mb-1 text-truncate">{{ rep.filename }}</h6>
+                                        <span class="text-muted small">{{ rep.created_at.strftime('%d %b %Y') }}</span>
+                                    </div>
+                                    <div class="d-flex align-items-center gap-3">
+                                        <span class="badge bg-secondary py-2 px-3">{{ rep.ats_score }}% ATS</span>
+                                        <a href="{{ url_for('resume.report_detail', report_id=rep.id) }}" class="btn btn-outline-primary btn-sm"><i class="fa-solid fa-chevron-right"></i></a>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="text-center py-5 text-muted">
+                            <i class="fa-solid fa-file-invoice fs-2 mb-2"></i>
+                            <p class="small">No historical evaluation reports found. Upload your first profile to begin.</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

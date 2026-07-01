@@ -1,0 +1,178 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ problem.title }} — Prep AI{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4 animate-fade-in">
+    <!-- Header -->
+    <div class="row mb-4 align-items-center">
+        <div class="col-12">
+            <a href="{{ url_for('coding.index') }}" class="btn btn-secondary btn-sm mb-3">
+                <i class="fa-solid fa-arrow-left me-1"></i> Back to Challenges
+            </a>
+            <div class="d-flex align-items-center gap-3">
+                <h1 class="text-white display-font mb-0">{{ problem.title }}</h1>
+                <span class="badge bg-secondary">{{ problem.topic }}</span>
+                {% if problem.difficulty == 'Easy' %}
+                    <span class="badge bg-success-subtle text-success border border-success">Easy</span>
+                {% elif problem.difficulty == 'Medium' %}
+                    <span class="badge bg-warning-subtle text-warning border border-warning">Medium</span>
+                {% else %}
+                    <span class="badge bg-danger-subtle text-danger border border-danger">Hard</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Workspace Panel Split Grid -->
+    <div class="row g-4">
+        <!-- Left Panel: Problem description -->
+        <div class="col-lg-6">
+            <div class="glass-card p-4 h-100 d-flex flex-column justify-content-between">
+                <div>
+                    <h5 class="text-white mb-3">Problem Description</h5>
+                    <p class="text-muted" style="line-height: 1.7;">{{ problem.description | replace('\n', '<br>') | safe }}</p>
+                    
+                    <h6 class="text-white mt-4 mb-2">Constraints</h6>
+                    <pre class="p-3 rounded border border-secondary text-muted bg-dark bg-opacity-50" style="font-size: 13.5px;">{{ problem.constraints }}</pre>
+                    
+                    <div class="row mt-4">
+                        <div class="col-md-6 mb-3">
+                            <h6 class="text-white mb-2">Sample Input</h6>
+                            <pre class="p-3 rounded border border-secondary text-white bg-dark bg-opacity-50" style="font-size: 13px;">{{ problem.sample_input }}</pre>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <h6 class="text-white mb-2">Sample Output</h6>
+                            <pre class="p-3 rounded border border-secondary text-white bg-dark bg-opacity-50" style="font-size: 13px;">{{ problem.sample_output }}</pre>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hints Accordion -->
+                <div class="mt-4 pt-3 border-top border-secondary">
+                    <div class="accordion accordion-flush" id="hintAccordion">
+                        <div class="accordion-item bg-transparent">
+                            <h2 class="accordion-header" id="headingHint">
+                                <button class="accordion-button collapsed bg-transparent text-primary py-2 px-0 fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint" aria-expanded="false" aria-controls="collapseHint" style="box-shadow: none;">
+                                    <i class="fa-regular fa-lightbulb me-1"></i> Reveal Hint & Approach
+                                </button>
+                            </h2>
+                            <div id="collapseHint" class="accordion-collapse collapse" aria-labelledby="headingHint" data-bs-parent="#hintAccordion">
+                                <div class="accordion-body text-muted px-0 pb-0 pt-3 small" style="line-height: 1.6;">
+                                    {{ problem.hints }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Panel: Code Sandbox Editor -->
+        <div class="col-lg-6">
+            <div class="glass-card p-4 d-flex flex-column gap-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="text-white mb-0">Write Code</h5>
+                    <select id="langSelect" class="form-select border-secondary text-white py-1 px-3" style="width: auto; background-color: #0f172a;">
+                        <option value="python">Python 3</option>
+                        <option value="cpp">C++ (G++ 17)</option>
+                        <option value="java">Java 11</option>
+                    </select>
+                </div>
+
+                <!-- Textarea Editor -->
+                <div>
+                    <textarea id="codeEditor" rows="18" class="form-control font-monospace text-white border-secondary" style="background-color: #080d16; font-size: 14px; line-height: 1.5;" placeholder="# Write your program here..."></textarea>
+                </div>
+
+                <!-- Compiler Log panel -->
+                <div class="d-none mt-2" id="consolePanel">
+                    <div class="p-3 rounded border" id="consoleBody" style="font-size: 13.5px; font-family: monospace;"></div>
+                </div>
+
+                <!-- Action Button -->
+                <div class="d-flex justify-content-end mt-2">
+                    <button class="btn btn-primary px-4 py-2" id="compileBtn">
+                        Submit Solution <i class="fa-solid fa-play ms-1"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const langSelect = document.getElementById('langSelect');
+        const codeEditor = document.getElementById('codeEditor');
+        const compileBtn = document.getElementById('compileBtn');
+        const consolePanel = document.getElementById('consolePanel');
+        const consoleBody = document.getElementById('consoleBody');
+
+        // Boilerplate templates per language
+        const boilerplates = {
+            python: `def solve():\n    # Write your logic here\n    pass\n\nsolve()`,
+            cpp: `#include <iostream>\nusing namespace std;\n\nint main() {\n    // Write your code here\n    return 0;\n}`,
+            java: `import java.util.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        // Write your code here\n    }\n}`
+        };
+
+        // Initialize editor template
+        codeEditor.value = boilerplates.python;
+
+        langSelect.addEventListener('change', () => {
+            const lang = langSelect.value;
+            codeEditor.value = boilerplates[lang];
+        });
+
+        // Submit AJAX Handler
+        compileBtn.addEventListener('click', async () => {
+            const code = codeEditor.value.trim();
+            const lang = langSelect.value;
+            
+            if (!code) {
+                alert("Please write some code before submitting.");
+                return;
+            }
+
+            compileBtn.disabled = true;
+            compileBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1" role="status"></span> Compiling...';
+            consolePanel.classList.add('d-none');
+
+            try {
+                const response = await fetch(`/coding/submit/{{ problem.id }}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ code: code, language: lang })
+                });
+
+                const data = await response.json();
+                consolePanel.classList.remove('d-none');
+
+                if (data.status === 'success') {
+                    consoleBody.className = "p-3 rounded border border-success bg-success bg-opacity-10 text-success";
+                    consoleBody.innerHTML = `<strong><i class="fa-solid fa-circle-check"></i> ${data.message}</strong><br><br>`;
+                    
+                    data.test_results.forEach(res => {
+                        consoleBody.innerHTML += `&bull; ${res.case}: <span class="badge bg-success">${res.status}</span><br>`;
+                    });
+                } else {
+                    consoleBody.className = "p-3 rounded border border-danger bg-danger bg-opacity-10 text-danger";
+                    consoleBody.innerHTML = `<strong><i class="fa-solid fa-circle-exclamation"></i> Compilation / Test Failed</strong><br><br>${data.message}`;
+                }
+            } catch (err) {
+                console.error(err);
+                consolePanel.classList.remove('d-none');
+                consoleBody.className = "p-3 rounded border border-danger bg-danger bg-opacity-10 text-danger";
+                consoleBody.textContent = "Error communicating with server compiler. Please try again.";
+            } finally {
+                compileBtn.disabled = false;
+                compileBtn.innerHTML = 'Submit Solution <i class="fa-solid fa-play ms-1"></i>';
+            }
+        });
+    });
+</script>
+{% endblock %}
