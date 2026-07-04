@@ -3,19 +3,25 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap');
 
 :root {
-    --bg-gradient: linear-gradient(135deg, #d790e0 0%, #ebebeb 50%, #9c94a0 100%);
-    --primary: #e2e2fc;
-    --primary-glow: rgba(118, 81, 128, 0.4);
-    --secondary: #a393b3;
-    --secondary-glow: rgba(178, 167, 189, 0.4);
-    --text-main: #080808;
-    --text-muted: #000000;
-    --card-bg: rgba(174, 156, 182, 0.6);
-    --card-border: rgba(175, 159, 175, 0.08);
-    --glass-bg: rgba(207, 159, 205, 0.35);
-    --sidebar-bg: rgba(162, 154, 165, 0.85);
-    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    --font-outfit: 'Outfit', 'Inter', sans-serif;
+    --bg-gradient: #F8F5E9;          /* Cream Background */
+    --primary: #8B5E3C;              /* Brown */
+    --primary-glow: rgba(139, 94, 60, 0.3);
+    --secondary: #C8A27A;            /* Light Brown */
+    --secondary-glow: rgba(200, 162, 122, 0.3);
+
+    --text-main: #000000;            /* Black */
+    --text-muted: #333333;
+
+    --card-bg: #FFFFFF;              /* White Cards */
+    --card-border: #D9C7B8;
+
+    --glass-bg: #FFFFFF;
+
+    --sidebar-bg: #6F4E37;           /* Coffee Brown */
+
+    --transition-smooth: all 0.3s ease;
+
+    --font-outfit: 'Outfit', sans-serif;
     --font-inter: 'Inter', sans-serif;
 }
 
@@ -42,19 +48,14 @@ h6,
 
 /* Glassmorphism Card styling */
 .glass-card {
-    background: var(--card-bg);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid var(--card-border);
-    border-radius: 16px;
-    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
-    transition: var(--transition-smooth);
+    background: white;
+    border: 1px solid #D9C7B8;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
-
-.glass-card:hover {
-    transform: translateY(-5px);
-    border-color: rgba(99, 102, 241, 0.3);
-    box-shadow: 0 15px 35px -5px rgba(99, 102, 241, 0.15);
+.glass-card:hover{
+    transform:translateY(-6px);
+    border-color:#8B5E3C;
 }
 
 /* Custom Scrollbar */
@@ -63,8 +64,8 @@ h6,
     height: 8px;
 }
 
-::-webkit-scrollbar-track {
-    background: rgba(15, 23, 42, 0.5);
+::-webkit-scrollbar-track{
+    background:#F4E9D8;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -82,31 +83,41 @@ h6,
     min-height: 100vh;
     position: relative;
 }
-
-/* Sidebar Styling */
-.sidebar {
-    width: 280px;
-    background: var(--sidebar-bg);
-    backdrop-filter: blur(20px);
-    border-right: 1px solid var(--card-border);
-    padding: 24px;
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 1000;
-    transition: var(--transition-smooth);
+.sidebar{
+    width:280px;
+    height:100vh;
+    position:fixed;
+    left:0;
+    top:0;
+    background:var(--sidebar-bg);
+    color:white;
+}
+.navbar{
+    background:#6F4E37 !important;
+}
+.sidebar,
+.navbar{
+    background:#6F4E37 !important;
 }
 
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    color: white;
+    text-decoration: none;
+    border-radius: 10px;
+    font-weight: 500;
+    transition: var(--transition-smooth);
+}
 .sidebar-brand {
     font-family: var(--font-outfit);
     font-size: 24px;
     font-weight: 800;
-    background: linear-gradient(135deg, #675072 0%, #c084fc 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: #ffffff;
+    background: none;
+    -webkit-text-fill-color: #ffffff;
     margin-bottom: 30px;
     display: flex;
     align-items: center;
@@ -132,7 +143,7 @@ h6,
     align-items: center;
     gap: 12px;
     padding: 12px 16px;
-    color: var(--text-muted);
+    color: white;
     text-decoration: none;
     border-radius: 10px;
     font-weight: 500;
@@ -140,14 +151,18 @@ h6,
     font-size: 15px;
 }
 
+.sidebar,
+.navbar{
+    background:#6F4E37 !important;
+}
 .sidebar-link i {
     font-size: 18px;
     transition: var(--transition-smooth);
 }
 
 .sidebar-link:hover {
-    color: var(--text-main);
-    background: rgba(255, 255, 255, 0.05);
+    background: #8B5E3C;
+    color: white;
 }
 
 .sidebar-link.active {
@@ -198,22 +213,17 @@ h6,
 /* Inputs & Buttons Styling */
 .form-control,
 .form-select {
-    background: rgba(15, 23, 42, 0.6);
-    border: 1px solid var(--card-border);
-    color: #fff;
-    border-radius: 10px;
-    padding: 12px 16px;
-    transition: var(--transition-smooth);
+    background: white;
+    color: black;
+    border: 1px solid #B89B7A;
 }
 
 .form-control:focus,
-.form-select:focus {
-    background: rgba(15, 23, 42, 0.8);
-    border-color: var(--primary);
-    box-shadow: 0 0 0 4px var(--primary-glow);
-    color: #fff;
+.form-select:focus{
+    background:white;
+    color:#000;
+    border-color:#8B5E3C;
 }
-
 .form-label {
     font-weight: 500;
     color: var(--text-muted);
@@ -221,37 +231,29 @@ h6,
     margin-bottom: 6px;
 }
 
-.btn-primary {
-    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-    border: none;
-    padding: 12px 24px;
-    border-radius: 10px;
-    font-weight: 600;
-    box-shadow: 0 4px 15px var(--primary-glow);
-    transition: var(--transition-smooth);
+.btn-primary{
+    background: var(--primary);
+    border:none;
+    color:white;
 }
 
-.btn-primary:hover,
-.btn-primary:focus {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.6);
-    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+.btn-primary:hover{
+    background:#6F4E37;
 }
 
-.btn-secondary {
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid var(--card-border);
-    color: #fff;
-    padding: 12px 24px;
-    border-radius: 10px;
-    font-weight: 600;
-    transition: var(--transition-smooth);
+.btn-secondary{
+    background:white;
+    color:var(--primary);
+    border:2px solid var(--primary);
+    transition:.3s;
 }
 
-.btn-secondary:hover {
-    background: rgba(255, 255, 255, 0.15);
-    border-color: rgba(255, 255, 255, 0.2);
-    color: #fff;
+
+.btn-secondary:hover{
+    background:#8B5E3C;
+    color:white;
+    border-color:#8B5E3C;
+    transform:translateY(-3px);
 }
 
 /* Chat Page Styling */
@@ -260,7 +262,10 @@ h6,
     display: flex;
     flex-direction: column;
 }
-
+.chat-container{
+    background:white;
+    border-radius:20px;
+}
 .chat-messages {
     flex-grow: 1;
     overflow-y: auto;
@@ -288,7 +293,7 @@ h6,
 }
 
 .chat-bubble.bot {
-    background: rgba(255, 255, 255, 0.07);
+    background:#ffffff;
     border: 1px solid var(--card-border);
     color: var(--text-main);
     align-self: flex-start;
@@ -303,18 +308,25 @@ h6,
 }
 
 /* Landing Page Styling */
-.landing-hero {
-    padding: 120px 0 80px 0;
-    text-align: center;
-    position: relative;
+
+.landing-hero{
+    box-shadow: inset 0 -60px 80px rgba(139,94,60,.08);
+}
+.landing-hero h1{
+    color:#3E2C1C !important;
+    font-weight:800;
+}
+.badge,
+.hero-badge{
+    background:var(--primary);
+    color:white;
 }
 
-.gradient-text {
-    background: linear-gradient(135deg, #a5b4fc 0%, #e9d5ff 50%, #f472b6 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+.gradient-text{
+    color:#3E2C1C !important;
+    background:none !important;
+    -webkit-text-fill-color:#3E2C1C !important;
 }
-
 .feature-icon {
     width: 60px;
     height: 60px;
@@ -445,13 +457,49 @@ h6,
 
 /* Stats Cards */
 .stat-icon {
-    font-size: 32px;
-    background: linear-gradient(135deg, #818cf8 0%, #c084fc 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: #8B5E3C;
+    background: none;
+    -webkit-text-fill-color: #8B5E3C;
 }
-
 .stat-val {
     font-size: 28px;
     font-weight: 700;
+}
+.feature-card{
+    background:#fff;
+    border-radius:18px;
+    padding:30px;
+    text-align:center;
+    border:1px solid #D9C7B8;
+    box-shadow:0 10px 20px rgba(0,0,0,.08);
+    transition:.3s;
+    height:100%;
+}
+
+.feature-card:hover{
+    transform:translateY(-8px);
+    box-shadow:0 15px 30px rgba(111,78,55,.2);
+}
+
+.feature-card h5{
+    margin-top:15px;
+    color:#3E2C1C;
+    font-weight:700;
+}
+
+.feature-card p{
+    color:#666;
+}
+
+.feature-icon{
+    width:70px;
+    height:70px;
+    margin:auto;
+    border-radius:50%;
+    background:#8B5E3C;
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:28px;
 }
