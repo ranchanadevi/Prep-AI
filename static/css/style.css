@@ -85,12 +85,14 @@ h6,
 }
 .sidebar{
     width:280px;
+    background:#6F4E37;
+    color:white;
     height:100vh;
     position:fixed;
     left:0;
     top:0;
-    background:var(--sidebar-bg);
-    color:white;
+    z-index:9999;
+    overflow-y:auto;
 }
 .navbar{
     background:#6F4E37 !important;
@@ -359,26 +361,36 @@ h6,
 }
 
 /* Responsive Styles */
-@media (max-width: 991px) {
-    .sidebar {
-        transform: translateX(-100%);
+@media (max-width:991px){
+
+    .sidebar{
+        width:280px;
+        left:0;
+        top:0;
+        height:100%;
+        position:fixed;
+        transform:translateX(-100%);
+        transition:0.3s ease;
+        z-index:9999;
     }
 
-    .sidebar.active {
-        transform: translateX(0);
+    .sidebar.active{
+        transform:translateX(0);
     }
 
-    .main-content {
-        margin-left: 0;
-        padding: 24px;
+    .main-content{
+        margin-left:0;
+        padding-top:80px;
     }
 
-    .mobile-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+    .mobile-header{
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
     }
+
 }
+    
 
 /* Quiz Timer UI */
 .timer-badge {

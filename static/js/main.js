@@ -23,8 +23,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (sidebarToggle && sidebar) {
         sidebarToggle.addEventListener('click', () => {
-            sidebar.classList.add('active');
-            overlay.style.display = 'block';
+            sidebar.classList.toggle("active");
+            overlay.style.display =
+sidebar.classList.contains("active")
+? "block"
+: "none";
         });
 
         overlay.addEventListener('click', () => {
