@@ -8,8 +8,11 @@
     <div class="row mb-4">
         <div class="col-12 d-flex justify-content-between align-items-center flex-wrap gap-3">
             <div>
-                <h1 class="text-white display-font mb-1">Welcome back, {{ user.full_name }}!</h1>
-                <p class="text-muted mb-0">Here is your placement readiness report for {{ user.college_name }} ({{ user.department }}, Year {{ user.year_of_study }}).</p>
+                <h1 class="display-font mb-1" style="color:#3E2C1C;">Welcome back, {{ user.full_name }}!</h1>
+                <p class="mb-0" style="color:#555;">
+    Here is your placement readiness report for {{ user.college_name }}
+    ({{ user.department }}, Year {{ user.year_of_study }}).
+</p>
             </div>
             <div>
                 <a href="{{ url_for('mock_interview.index') }}" class="btn btn-primary">
@@ -28,7 +31,7 @@
                 </div>
                 <div>
                     <div class="text-muted small">Total Quizzes</div>
-                    <div class="stat-val text-white">{{ total_quizzes }}</div>
+                    <div class="stat-val" style="color:#3E2C1C;">{{ total_quizzes }}</div>
                 </div>
             </div>
         </div>
@@ -39,7 +42,7 @@
                 </div>
                 <div>
                     <div class="text-muted small">Average Score</div>
-                    <div class="stat-val text-white">{{ avg_score }}%</div>
+                    <div class="stat-val" style="color:#3E2C1C;">{{ avg_score }}%</div>
                 </div>
             </div>
         </div>
@@ -50,7 +53,7 @@
                 </div>
                 <div>
                     <div class="text-muted small">Strong Topics</div>
-                    <div class="stat-val text-white">
+                    <div class="stat-val" style="color:#3E2C1C;">
                         {% if strong_topics %}
                             <span class="fs-6 badge bg-success-subtle text-success border border-success">{{ strong_topics|length }} Active</span>
                         {% else %}
@@ -67,7 +70,7 @@
                 </div>
                 <div>
                     <div class="text-muted small">Weak Topics</div>
-                    <div class="stat-val text-white">
+                    <div class="stat-val" style="color:#3E2C1C;">
                         {% if weak_topics %}
                             <span class="fs-6 badge bg-danger-subtle text-danger border border-danger">{{ weak_topics|length }} Critical</span>
                         {% else %}
@@ -85,7 +88,7 @@
         <div class="col-lg-7">
             <!-- Strengths / Weaknesses Breakdown -->
             <div class="glass-card p-4 mb-4">
-                <h4 class="text-white mb-3"><i class="fa-solid fa-shapes text-primary me-2"></i> Topics Breakdown</h4>
+                <h4 class="mb-3" style="color:#3E2C1C;"><i class="fa-solid fa-shapes text-primary me-2"></i> Topics Breakdown</h4>
                 
                 <div class="row">
                     <div class="col-md-6 mb-3">
@@ -121,7 +124,7 @@
 
             <!-- Recommended Practice Modules -->
             <div class="glass-card p-4">
-                <h4 class="text-white mb-3"><i class="fa-solid fa-graduation-cap text-primary me-2"></i> Recommended for You</h4>
+                <h4 class="mb-3" style="color:#3E2C1C;"><i class="fa-solid fa-graduation-cap text-primary me-2"></i> Recommended for You</h4>
                 
                 <div class="d-flex flex-column gap-3">
                     {% for rec in recommendations %}
@@ -131,7 +134,7 @@
                                     <i class="fa-solid {{ rec.icon }} fs-5"></i>
                                 </div>
                                 <div>
-                                    <h6 class="text-white mb-1">{{ rec.title }}</h6>
+                                    <h6 class="mb-1" style="color:#3E2C1C;">{{ rec.title }}</h6>
                                     <p class="text-muted mb-0 small">{{ rec.description }}</p>
                                 </div>
                             </div>
@@ -145,7 +148,7 @@
         <!-- Right Panel: Activity Feed -->
         <div class="col-lg-5">
             <div class="glass-card p-4 h-100">
-                <h4 class="text-white mb-4"><i class="fa-solid fa-clock-rotate-left text-primary me-2"></i> Recent Activity Feed</h4>
+                <h4 class="mb-3" style="color:#3E2C1C;"><i class="fa-solid fa-clock-rotate-left text-primary me-2"></i> Recent Activity Feed</h4>
                 
                 {% if recent_activities %}
                     <div class="timeline-wrapper ps-2">
@@ -156,7 +159,7 @@
                                         <i class="fa-solid {{ act.icon.split(' ')[0] }} {{ act.icon.split(' ')[1] }} small"></i>
                                     </div>
                                     <div>
-                                        <h6 class="text-white mb-1">{{ act.title }}</h6>
+                                        <h6 class="mb-1" style="color:#3E2C1C;">{{ act.title }}</h6>
                                         <p class="text-muted mb-0 small">{{ act.desc }}</p>
                                         <span class="text-muted text-opacity-75 small" style="font-size: 11px;">{{ act.date.strftime('%d %b %Y, %I:%M %p') }}</span>
                                     </div>
