@@ -6,6 +6,12 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash,
 from models import db
 from models.user import User
 
+from app import mail
+from flask_mail import Message
+
+
+
+
 auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
 
 # Mock cache to store password reset tokens: {token: (email, expiry_datetime)}
@@ -138,29 +144,51 @@ def logout():
 def forgot_password():
     if request.method == 'POST':
         email = request.form.get('email', '').strip().lower()
+
         if not email:
             flash("Please enter your email address.", "error")
             return render_template('auth/forgot_password.html')
 
         user = User.query.filter_by(email=email).first()
+
         if user:
-            # Generate UUID token expiring in 15 minutes
             token = str(uuid.uuid4())
             expiry = datetime.utcnow() + timedelta(minutes=15)
             reset_tokens[token] = (email, expiry)
-            
-            # Print to stdout console for developers/testing
-            reset_link = url_for('auth.reset_password', token=token, _external=True)
-            print(f"--- PASSWORD RESET SIMULATION FOR {email} ---")
-            print(f"Token: {token}")
-            print(f"Link: {reset_link}")
-            print("---------------------------------------------")
-            
-            # Flash success message with the simulated link so users can test it easily!
-            flash(f"Password reset link generated! For local testing, click this link to reset password: {reset_link}", "success")
+
+            reset_link = url_for(
+                'auth.reset_password',
+                token=token,
+                _external=True
+            )
+
+            msg = Message(
+                subject="Prep AI - Password Reset",
+                sender="ranchanadevi07@gmail.com",
+                recipients=[email]
+            )
+
+            msg.body = f"""
+Hello,
+
+You requested a password reset.
+
+Click the link below to reset your password:
+
+{reset_link}
+
+This link will expire in 15 minutes.
+
+Thank you,
+Prep AI Team
+"""
+
+            mail.send(msg)
+
+            flash("Password reset link has been sent to your email.", "success")
+
         else:
-            # Prevent user enumeration, but since this is local development let's notify
-            flash("If that email is registered, we have simulated a password reset link for you in terminal log.", "success")
+            flash("Email not found.", "error")
 
     return render_template('auth/forgot_password.html')
 

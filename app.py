@@ -3,13 +3,20 @@ import os
 from flask import Flask, render_template, session, redirect, url_for
 from config import Config
 from models import db
+from flask_mail import Mail
+
+
+mail = Mail()
 
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
 
     # Initialize SQLAlchemy database instance
+   
+
     db.init_app(app)
+    mail.init_app(app)
 
     # Register Blueprints
     from routes.auth import auth_bp

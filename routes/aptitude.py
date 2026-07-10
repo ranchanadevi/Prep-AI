@@ -22,23 +22,26 @@ def start(category):
         flash("Invalid aptitude category.", "error")
         return redirect(url_for('aptitude.index'))
 
-    # Retrieve all questions in the category and sample 10 of them
+    # Retrieve all questions in the category
     all_questions = AptitudeQuestion.query.filter_by(category=category).all()
+
+    print("Category received:", category)
+    print("Questions found:", len(all_questions))
+
     if not all_questions:
         flash("No questions found in this category. Database seed may be missing.", "error")
         return redirect(url_for('aptitude.index'))
 
     sampled_questions = random.sample(all_questions, min(10, len(all_questions)))
 
-    # Set up session state
     session['aptitude_quiz'] = {
         'category': category,
         'question_ids': [q.id for q in sampled_questions],
-        'answers': {},  # format: {"0": "A", "1": "C"}
+        'answers': {},
         'start_time': datetime.utcnow().isoformat(),
-        'time_limit': 600  # 10 minutes (600 seconds)
+        'time_limit': 600
     }
-    
+
     return redirect(url_for('aptitude.quiz', idx=0))
 
 @aptitude_bp.route('/quiz', methods=['GET', 'POST'])
@@ -156,7 +159,6 @@ def submit_quiz():
         )
         db.session.add(progress)
 
-    # Commit first so the aggregate includes this attempt
     try:
         db.session.commit()
     except Exception as e:

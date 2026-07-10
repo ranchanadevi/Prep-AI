@@ -51,8 +51,24 @@ def submit_code(problem_id):
     # Basic simulated local check for placement practice
     # For example, if it's Easy and has basic syntax, return success.
     # To make it highly interactive and realistic, let's parse basic coding patterns or do a simple compilation sanity test.
-    is_valid_structure = True
-    feedback_message = "All test cases passed successfully!"
+   
+    is_valid_structure = False
+    feedback_message = "Solution is incorrect."
+
+    if language == "python":
+        if "def solve" in code and "pass" not in code:
+            is_valid_structure = True
+            feedback_message = "Basic validation passed."
+
+    elif language == "cpp":
+        if "int main" in code and "return 0;" in code:
+            is_valid_structure = True
+            feedback_message = "Basic validation passed."
+
+    elif language == "java":
+        if "public static void main" in code:
+            is_valid_structure = True
+            feedback_message = "Basic validation passed."
     
     # Simple code checks: check if basic structures are present
     if language == 'python' and ":" not in code:

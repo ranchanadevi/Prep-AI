@@ -524,3 +524,26 @@ h6,
     background:#ff6b6b;
     color:white;
 }
+.glass-card h1,
+.glass-card h2,
+.glass-card h3,
+.glass-card h4,
+.glass-card h5,
+.glass-card h6,
+.glass-card p,
+.glass-card span,
+.glass-card label,
+.glass-card strong {
+    color: black !important;
+}
+
+input,
+textarea,
+select {
+    color: black !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: gray !important;
+}
