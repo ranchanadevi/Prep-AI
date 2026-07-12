@@ -547,3 +547,12 @@ input::placeholder,
 textarea::placeholder {
     color: gray !important;
 }
+
+#answerInput{
+    color:#000 !important;
+    background:#fff !important;
+}
+
+#answerInput::placeholder{
+    color:#666 !important;
+}
