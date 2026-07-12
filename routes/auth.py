@@ -162,7 +162,7 @@ def forgot_password():
                 _external=True
             )
 
-            msg = Message(
+                        msg = Message(
                 subject="Prep AI - Password Reset",
                 sender="ranchanadevi07@gmail.com",
                 recipients=[email]
@@ -183,12 +183,16 @@ Thank you,
 Prep AI Team
 """
 
-            mail.send(msg)
-
-            flash("Password reset link has been sent to your email.", "success")
+            try:
+                mail.send(msg)
+                flash("Password reset link has been sent to your email.", "success")
+            except Exception as e:
+                print("MAIL ERROR:", e)
+                flash(f"Mail sending failed: {e}", "error")
 
         else:
             flash("Email not found.", "error")
+
 
     return render_template('auth/forgot_password.html')
 
