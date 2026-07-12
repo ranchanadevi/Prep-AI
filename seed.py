@@ -1,18 +1,23 @@
 import os
 from app import create_app
 from models import db
+
+from models.aptitude_questions import AptitudeQuestion
 from models.aptitude_questions import AptitudeQuestion
 from models.technical_questions import TechnicalQuestion
 from models.company_questions import CompanyQuestion
 from models.hr_questions import HRQuestion
 from models.coding_questions import CodingQuestion
 
+
 def seed_database():
     app = create_app()
     with app.app_context():
-        # Clear existing tables to prevent duplicate entries
-        db.drop_all()
         db.create_all()
+       
+        
+        # Clear existing tables to prevent duplicate entries
+
         
         print("Database tables initialized. Seeding questions...")
 

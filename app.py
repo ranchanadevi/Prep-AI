@@ -6,6 +6,7 @@ from models import db
 from flask_mail import Mail
 
 
+
 mail = Mail()
 
 def create_app():
@@ -65,6 +66,8 @@ def create_app():
     with app.app_context():
         db.create_all()
 
+    # Seed database only if empty
+        
     return app
 
 if __name__ == '__main__':
