@@ -70,16 +70,3 @@ def create_app():
         
     return app
 
-if __name__ == '__main__':
-    app = create_app()
-    app.run(host='127.0.0.1', port=5000, debug=True)
-with app.app_context():
-    db.create_all()
-
-    print("Before Seed:", AptitudeQuestion.query.count())
-
-    if AptitudeQuestion.query.count() == 0:
-        print("Calling seed_database()")
-        seed_database()
-
-    print("After Seed:", AptitudeQuestion.query.count())
