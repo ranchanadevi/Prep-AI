@@ -160,36 +160,36 @@ def forgot_password():
                 'auth.reset_password',
                 token=token,
                 _external=True
-            )
+        )
 
-                        msg = Message(
+            msg = Message(
                 subject="Prep AI - Password Reset",
                 sender="ranchanadevi07@gmail.com",
                 recipients=[email]
             )
 
             msg.body = f"""
-Hello,
+        Hello,
 
-You requested a password reset.
+        You requested a password reset.
 
-Click the link below to reset your password:
+        Click the link below to reset your password:
 
-{reset_link}
+        {reset_link}
 
-This link will expire in 15 minutes.
+        This link will expire in 15 minutes.
 
-Thank you,
-Prep AI Team
-"""
+        Thank you,
+        Prep AI Team
+        """
 
             try:
                 mail.send(msg)
                 flash("Password reset link has been sent to your email.", "success")
             except Exception as e:
-                print("MAIL ERROR:", e)
-                flash(f"Mail sending failed: {e}", "error")
-
+                print("MAIL ERROR:", str(e))
+                flash("Unable to send email. Check Render logs.", "error")
+                
         else:
             flash("Email not found.", "error")
 
