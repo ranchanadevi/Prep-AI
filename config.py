@@ -10,15 +10,15 @@ class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY', 'default-dev-secret-key-12345')
     
     # Check fallback option
-    use_sqlite = os.environ.get('USE_SQLITE_FALLBACK', 'True').lower() in ('true', '1', 'yes')
-    
-    if use_sqlite:
-        SQLALCHEMY_DATABASE_URI = f"sqlite:///{os.path.join(BASE_DIR, 'prep_ai.db')}"
-    else:
-        SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
-        if not SQLALCHEMY_DATABASE_URI:
-            SQLALCHEMY_DATABASE_URI = f"sqlite:///{os.path.join(BASE_DIR, 'prep_ai.db')}"
-            
+    DATABASE_URL = os.environ.get("DATABASE_URL")
+
+    if DATABASE_URL:
+    # Fix for Render/Heroku style URLs
+        if DATABASE_URL.startswith("postgres://"):
+            DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+
+    SQLALCHEMY_DATABASE_URI = DATABASE_URL or f"sqlite:///{os.path.join(BASE_DIR, 'prep_ai.db')}"
+
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     
     # Upload Settings
