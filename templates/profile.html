@@ -63,15 +63,15 @@
                         <label for="year_of_study" class="form-label">Year of Study</label>
                         <select class="form-select text-white border-secondary" id="year_of_study" name="year_of_study"
                             required style="background-color: #0f172a;">
-                            <option value="1" {% if user.year_of_study==1 %}selected{% endif %}>1st Year (Freshman)
+                            <option value="1" {% if user.year_of_study==1 %}selected{% endif %}>1st Year 
                             </option>
-                            <option value="2" {% if user.year_of_study==2 %}selected{% endif %}>2nd Year (Sophomore)
+                            <option value="2" {% if user.year_of_study==2 %}selected{% endif %}>2nd Year 
                             </option>
-                            <option value="3" {% if user.year_of_study==3 %}selected{% endif %}>3rd Year (Junior)
+                            <option value="3" {% if user.year_of_study==3 %}selected{% endif %}>3rd Year (Pre Final Year)
                             </option>
-                            <option value="4" {% if user.year_of_study==4 %}selected{% endif %}>4th Year (Senior)
+                            <option value="4" {% if user.year_of_study==4 %}selected{% endif %}>4th Year (Final Year)
                             </option>
-                            <option value="5" {% if user.year_of_study==5 %}selected{% endif %}>5th Year</option>
+                            <option value="5" {% if user.year_of_study==5 %}selected{% endif %}>Graduate</option>
                         </select>
                     </div>
 

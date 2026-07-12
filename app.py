@@ -18,6 +18,14 @@ def create_app():
 
     db.init_app(app)
     mail.init_app(app)
+    from models.user import User
+
+    @app.context_processor
+    def inject_user():
+        if 'user_id' in session:
+            user = User.query.get(session['user_id'])
+            return {"user": user}
+        return {"user": None}
 
     # Register Blueprints
     from routes.auth import auth_bp
